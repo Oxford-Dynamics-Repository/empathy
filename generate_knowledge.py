@@ -11,6 +11,7 @@
 
 from random import *
 
+
 def generate_knowledge():
     output = []
 
@@ -61,8 +62,7 @@ def generate_knowledge():
     return ' - '.join(output)
 
 def main():
-    sentences = generate_knowledge()
-    
+    sentences = generate_knowledge()    
     print(sentences)
     
 
