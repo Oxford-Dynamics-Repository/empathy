@@ -14,7 +14,6 @@ def generate_dialogues():
 
     examples = []
 
-    # First interaction with the conversational AI.
     for distance, appearance in zip(distances, appearances):
         knowledge_1 = f'{appearance} people, {distance} away'
 
