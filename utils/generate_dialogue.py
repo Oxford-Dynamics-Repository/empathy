@@ -100,7 +100,7 @@ def save_to_file(examples):
             writer.write(i)
 
 def main():
-    number_of_samples = 1000 # Define the number of samples.
+    number_of_samples = 4 # Define the number of samples.
     generate_dialogues(number_of_samples)    
     
 

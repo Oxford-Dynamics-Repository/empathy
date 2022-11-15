@@ -1,6 +1,7 @@
 # Johann Diep (johann@oxdynamics.com) - Oxford Dynamics - November 2022
 #
 # This script generates a grounded dialogue dataset for the military combat situation.
+# This document is legacy, please refer the generate_dialogue.py.
 
 import copy
 import jsonlines
