@@ -11,11 +11,12 @@ from random import *
 
 def generate_dialogues(number_dialogues):
     examples = []
-    context = ['Are there any immediate threats near me?', 'Are there any danger nearby?', 'Is there something dangerous nearby?']
     
     for i in range(0, number_dialogues):
+        # Setting up the conversation start (asking about environment). 
+        context = ['Are there any immediate threats near me?', 'Are there any danger nearby?', 'Is there something dangerous nearby?']
         rand_context = randint(0, len(context)-1)
-        
+
         knowledge_dictionary = generate_knowledge()
         
         number_enemies = knowledge_dictionary['number_enemies']
@@ -55,17 +56,52 @@ def generate_dialogues(number_dialogues):
         example['Context'] = context[rand_context]
         example['Knowledge'] = knowledge
         example['Response'] = response[rand_response]
-        examples.append(copy.deepcopy(example))        
+        examples.append(copy.deepcopy(example))
             
-    save_to_file(examples)
+        save_to_file(examples)
+        examples = []
+
+        # Following up the conversation (asking for weapons).
+        if number_enemies != '0':
+            context = ['What weapons are they carrying?', 'Are they armed?']
+            rand_context = randint(0, len(context)-1)
+
+            prev_response = example['Response']
+            response = [f'They are armed with {type_weapon}.', f'They are equipped with {type_weapon}.']
+            rand_response = randint(0, len(response)-1)
+
+            example['Context'] = example['Context'] + ' EOS ' + prev_response + ' EOS ' + context[rand_context]
+            example['Knowledge'] = knowledge
+            example['Response'] = response[rand_response]
+            examples.append(copy.deepcopy(example))
+
+            save_to_file(examples)
+            examples = []
+
+            # Following up the conversation (asking about their locations).
+            context = ['Where are they?', 'What is their location?']
+            rand_context = randint(0, len(context)-1)
+
+            prev_response = example['Response']
+            response = [f'They are at {enemy_street_name}.', f'They are located at {enemy_street_name}.']
+            rand_response = randint(0, len(response)-1)
+
+            example['Context'] = example['Context'] + ' EOS ' + prev_response + ' EOS ' + context[rand_context]
+            example['Knowledge'] = knowledge
+            example['Response'] = response[rand_response]
+            examples.append(copy.deepcopy(example))
+
+            save_to_file(examples)
+            examples = []
 
 def save_to_file(examples):
-    with jsonlines.open(f'military_dialogues.jsonl', mode='w') as writer:
+    with jsonlines.open(f'military_dialogues.jsonl', mode='a') as writer:
         for i in examples:
             writer.write(i)
 
 def main():
-    generate_dialogues(5)    
+    number_of_samples = 1000 # Define the number of samples.
+    generate_dialogues(number_of_samples)    
     
 
 if __name__ == '__main__':
