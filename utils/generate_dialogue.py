@@ -2,6 +2,19 @@
 #
 # This script generates a grounded dialogue dataset for the military combat situation with the 
 # knowledge from the generate_knowledge.py script. 
+#
+# Example: 
+# - Context:       "Are there any danger nearby? 
+#                  "4 enemies, 9 tanks and 3 drones are detected."
+#                  "What weapons are they carrying?"
+#                  "They are armed with explosives."
+#                  "What is their location?"
+# - Knowledge:     "4, enemies, explosives, Laguna Street"
+#                  "4, civilians, Sutter Street"
+#                  "9, tanks, Clay Street"
+#                  "3, drones, Turk Street"
+#                  "9, cats, Geary Boulevard"
+# - Response:      "They are at Laguna Street."
 
 import copy
 import jsonlines

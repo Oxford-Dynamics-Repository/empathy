@@ -3,11 +3,11 @@
 # This script generates the knowledge (comma-separated sentences) for the military combat situation.
 #
 # 5 examples in random order:
-# - 4 terrorists, AK47, Eddy Street
-# - 10 civilians, Ellis Street
-# - 2 tanks, Laguna Street
-# - 3 drones, Turk Street
-# - 4 cows, Geary Boulevard
+# - "4 terrorists, AK47, Eddy Street"
+# - "10 civilians, Ellis Street"
+# - "2 tanks, Laguna Street"
+# - "3 drones, Turk Street"
+# - "4 cows, Geary Boulevard"
 
 from random import *
 
