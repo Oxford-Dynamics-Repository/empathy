@@ -33,11 +33,8 @@ def speech_to_text():
 
                 return text
                 
-        except sr.RequestError as e:
-            print("Could not request results: {0}".format(e))
-            
-        except sr.UnknownValueError:
-            print("Unknown error occurred.")
+        except:
+            pass
 
 def main():
     output = speech_to_text()
