@@ -22,7 +22,7 @@ def speech_to_text():
             with sr.Microphone() as source:
                 # Wait for a second to let the recognizer adjust the energy threshold 
                 # based on the surrounding noise level.
-                recognizer.adjust_for_ambient_noise(source, duration=1)
+                recognizer.adjust_for_ambient_noise(source, duration=0.1)
                 
                 # Listening for the user input.
                 audio = recognizer.listen(source)
@@ -37,9 +37,13 @@ def speech_to_text():
             pass
 
 def main():
-    output = speech_to_text()
-    text_to_speech(output)
-    
+    i = 0
+    while(i < 10):
+        output = speech_to_text()
+        text_to_speech(output)
+
+        i = i + 1
+
 
 if __name__ == '__main__':
     main()

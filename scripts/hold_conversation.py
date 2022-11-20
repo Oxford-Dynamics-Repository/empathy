@@ -3,6 +3,7 @@
 # This script is for testing the GODEL model.
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from converse_t2s_s2t import speech_to_text, text_to_speech
 
 
 def generate(instruction, knowledge, dialog):
@@ -24,25 +25,29 @@ def hold_conversation():
     instruction = f'Instruction: given a dialog context and related knowledge, you need to response safely based on the knowledge.'
 
     knowledge_input = input('Knowledge: ')
-    question_input = input('Question: ')
+    question_input = speech_to_text()
+    print("Question: " + question_input)
 
     knowledge = f'{knowledge_input}'
     dialog = [f'{question_input}']
 
     response = generate(instruction, knowledge, dialog)
-    print(response)
+    print("Response: " + response)
+    text_to_speech(response)
 
     dialog.append(response)
 
     while question_input != '':
         knowledge_input = input('Knowledge: ')
-        question_input = input('Question: ')
+        question_input = speech_to_text()
+        print("Question: " + question_input)
 
         knowledge = f'{knowledge_input}'
         dialog.append(question_input)
-        
+
         response = generate(instruction, knowledge, dialog)
-        print(response)
+        print("Response: " + response)
+        text_to_speech(response)
 
         dialog.append(response)
 
