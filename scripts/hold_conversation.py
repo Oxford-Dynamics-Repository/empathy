@@ -14,14 +14,14 @@ def generate(instruction, knowledge, dialog):
     dialog = ' EOS '.join(dialog)
     query = f"{instruction} [CONTEXT] {dialog} {knowledge}"
     input_ids = tokenizer(f"{query}", return_tensors="pt").input_ids
-    outputs = model.generate(input_ids, max_length=128, min_length=8, top_p=1, do_sample=False)
+    outputs = model.generate(input_ids, max_length=128, min_length=8, top_p=0.8, do_sample=False)
     output = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return output
 
 
 def hold_conversation():
     # Defining the instruction.
-    instruction = f'Instruction: given a dialog context, you need to response empathetically.'
+    instruction = f'Instruction: given a dialog context and related knowledge, you need to response safely based on the knowledge.'
 
     knowledge_input = input('Knowledge: ')
     question_input = input('Question: ')
@@ -34,14 +34,17 @@ def hold_conversation():
 
     dialog.append(response)
 
-    question_input = input('Question: ')
     while question_input != '':
+        knowledge_input = input('Knowledge: ')
+        question_input = input('Question: ')
+
+        knowledge = f'{knowledge_input}'
         dialog.append(question_input)
+        
         response = generate(instruction, knowledge, dialog)
         print(response)
 
         dialog.append(response)
-        question_input = input('Question: ')
 
 def main():
     hold_conversation()
