@@ -10,7 +10,7 @@ def return_database():
                 "Number of people": ["5", "8", "3", "3"], 
                 "Weapons": ["Pump Shotguns", "AK-47s", "Revolvers", "Sniper Rifles"],
                 "Locations": ["Tilted Towers", "Greasy Grove", "Pleasant Park", "Flush Factory"],
-                "Distance Away": ["1km", "2km", "3km", "4km"]}
+                "Distance Away": ["1 kilometer", "2 kilometers", "3 kilometers", "4 kilometers"]}
 
     table = pd.DataFrame.from_dict(database)
     return table
