@@ -16,13 +16,14 @@ def generate_knowledge():
     output = {}
     rand_number = randint(0,9)
 
-    dangers = ["enemies", "terrorists"]
-    people = ["civilians", "men", "women"]
-    weapons = ["rifles", "explosives", "guns", "knives"]
-    streets = ["Eddy Street", "Ellis Street", "Laguna Street", "Turk Street", "Geary Boulevard", "Pine Street", "Sutter Street", "Clay Street"]
-    mobiles = ["tanks", "tactical vehicles"]
-    aircrafts = ["drones", "helicopters", "combat aircrafts"]
+    dangers = ["enemies", "terrorists", "assassins", "gunmen"]
+    people = ["civilians", "men", "women", "citizens", "children"]
+    weapons = ["assault rifles", "submachine guns", "pump shotguns", "revolvers", 'explosives', 'bombs', 'knives', 'AK47s']
+    streets = ["Greasy Grove", "Pleasant Park", "Retail Row", "Anarchy Acres", "Fatal Fields", "Flush Factory", "Loot Lake", "Container Yard"]
+    mobiles = ["tanks", "tactical vehicles", "passenger cars", "SUVs", "trucks"]
+    aircrafts = ["drones", "helicopters", "combat aircrafts", "UAVs", "quadcopters"]
     animals = ["cows", "horses", "dogs", "cats", "pigs"]
+    colors = ["black", "white", "red", "gray", "blue", "green", "yellow"]
 
     # Building enemy dictionary.
     danger_id = randint(0,len(dangers)-1)
@@ -49,10 +50,17 @@ def generate_knowledge():
     # Building mobile dictionary.
     mobile_id = randint(0,len(mobiles)-1)
     street_id = randint(0,len(streets)-1)
+    color_id = randint(0,len(colors)-1)
+    other_id = randint(0,len(colors)-1)
     output['number_mobiles'] = f'{randint(2,10)}'
     output['type_mobile'] = f'{mobiles[mobile_id]}'
     output['mobile_street_name'] = f'{streets[street_id]}'
-
+    output['mobile_color'] = f'{colors[color_id]}'
+    
+    while(color_id == other_id):
+        other_id = randint(0,len(colors)-1)
+    output['other_color'] = f'{colors[other_id]}'
+ 
     if rand_number == 0: 
         output['number_mobiles'] = '0'
         output['type_mobile'] = 'none'
