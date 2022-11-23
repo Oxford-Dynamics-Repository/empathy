@@ -19,6 +19,154 @@ from random import *
 from random import shuffle
 
 
+# Following up the conversation (asking for weapons).
+def ask_weapons(example, knowledge, type_enemy, type_weapon):
+    examples = []
+
+    context = [f'What weapons are the {type_enemy} carrying?', f'Are the {type_enemy} armed?',
+        f'Anything I should know about the equipments of the {type_enemy}?', f'Can you tell me anything about the weapons of the {type_enemy}?']
+    rand_context = randint(0, len(context)-1)
+
+    prev_response = example['Response']
+    response = [f'They are armed with {type_weapon}.', f'They are equipped with {type_weapon}.', 
+        f'They are carrying {type_weapon}.', f'I detected {type_weapon}.', f'CCTV footages showcased that they are carrying {type_weapon}.']
+    rand_response = randint(0, len(response)-1)
+
+    example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+    example['Knowledge'] = knowledge
+    example['Response'] = response[rand_response]
+    examples.append(copy.deepcopy(example))
+
+    save_to_file(examples)
+    return example
+    
+# Following up the conversation (asking about their locations).
+def ask_location(example, knowledge, type_enemy, enemy_street_name):
+    examples = []
+
+    context = [f'Where are the {type_enemy}?', f'What is the location of the {type_enemy}?', f'Can you tell me anything about the position of the {type_enemy}?',
+        f'Where are the {type_enemy} at?', f'Give me the position of the {type_enemy}!', f'What about the location of the {type_enemy}?']
+    rand_context = randint(0, len(context)-1)
+
+    prev_response = example['Response']
+    response = [f'They are at {enemy_street_name}.', f'They are located at {enemy_street_name}.', 
+        f'The {type_enemy} are at {enemy_street_name}.', f'CCTV footages detected them at {enemy_street_name}.',
+        f'It looks like they are at {enemy_street_name}.']
+    rand_response = randint(0, len(response)-1)
+
+    example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+    example['Knowledge'] = knowledge
+    example['Response'] = response[rand_response]
+    examples.append(copy.deepcopy(example))
+
+    save_to_file(examples)
+    return example
+
+# Following up the conversation (asking about cars).
+def ask_cars(example, knowledge, mobile_color, other_color, type_mobile, mobile_street_name, number_mobiles):
+    examples = []
+    random_variable = randint(0,1)
+
+    # Asking for the correct car color.
+    if random_variable == 0:
+        context = [f'Can you detect any {mobile_color} {type_mobile}?', f'Any {mobile_color} {type_mobile}?',
+            f'Can you see any {mobile_color} {type_mobile}?', f'Are the {type_mobile} of color {mobile_color}?',
+            f'Is the {type_mobile} in {mobile_street_name} {mobile_color}?']
+        rand_context = randint(0, len(context)-1)
+
+        prev_response = example['Response']
+        response = [f'Yes, the {type_mobile} in {mobile_street_name} are {mobile_color}.', 
+            f'I detected {number_mobiles} {mobile_color} {type_mobile} in {mobile_street_name}.', 
+            f'The {type_mobile} in {mobile_street_name} are {mobile_color}.']
+        rand_response = randint(0, len(response)-1)
+
+        example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+        example['Knowledge'] = knowledge
+        example['Response'] = response[rand_response]
+        examples.append(copy.deepcopy(example))
+
+        save_to_file(examples)
+        return example
+
+    # Asking for the wrong car color.
+    else:
+        context = [f'Can you detect any {other_color} {type_mobile}?', f'Any {other_color} {type_mobile}?',
+            f'Can you see any {other_color} {type_mobile}?', f'Are the {type_mobile} of color {other_color}?',
+            f'Is the {type_mobile} in {mobile_street_name} {other_color}?']
+        rand_context = randint(0, len(context)-1)
+
+        prev_response = example['Response']
+        response = [f'No, the {type_mobile} in {mobile_street_name} are {mobile_color}.', 
+            f'No, but I detected {number_mobiles} {mobile_color} {type_mobile} in {mobile_street_name}.', 
+            f'No, the {type_mobile} in {mobile_street_name} are {mobile_color}.',
+            f'No, I can not detect any {other_color} {type_mobile}.', f'No {other_color} {type_mobile} detected.']
+        rand_response = randint(0, len(response)-1)
+
+        example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+        example['Knowledge'] = knowledge
+        example['Response'] = response[rand_response]
+        examples.append(copy.deepcopy(example))                     
+
+        save_to_file(examples)
+        return example
+
+# Following up the conversation (emotional conversation).
+def ask_support(example, knowledge):
+    examples = []
+
+    context = ['I am scared.', 'I am worried.', 'I am kinda scared.', 'I do not know if I will survive.', 'I do not know what to do.']
+    rand_context = randint(0, len(context)-1)
+
+    prev_response = example['Response']
+    response = ['Stick to the plan.', 'You were trained for this.', 'Think about your training.', 'Stay alerted.', 
+        'Understand, be careful.', 'Stay calm.', 'Breath air.', 'Take a deep breath.', 'Focus.', 'Stay focused.']
+    rand_response = randint(0, len(response)-1)
+
+    example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+    example['Knowledge'] = knowledge
+    example['Response'] = response[rand_response]
+    examples.append(copy.deepcopy(example))
+
+    save_to_file(examples)
+    return example
+
+# Following up the conversation (civilians).
+def ask_civilians(example, knowledge, type_civilian, civilian_street_name, type_enemy, enemy_street_name):
+    examples = []
+
+    context = [f'Are the {type_civilian} safe?', f'Are the {type_civilian} close to the {type_enemy}?', f'Are the {type_civilian} in danger?',
+        f'Are the {type_enemy} close to the {type_civilian}?', f'Are the {type_enemy} and {type_civilian} in the same location?']
+    rand_context = randint(0, len(context)-1)
+
+    prev_response = example['Response']
+    # If the civilians and the enemies are sharing the same location.
+    if civilian_street_name == enemy_street_name:
+        response = [f'No, the {type_civilian} and {type_enemy} are both in {civilian_street_name}.', f'No, the {type_civilian} and {type_enemy} are both in the same location.',
+            'No, both are in the same location.', f'The {type_enemy} and {type_civilian} are in the same location.']
+        rand_response = randint(0, len(response)-1)
+
+        example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+        example['Knowledge'] = knowledge
+        example['Response'] = response[rand_response]
+        examples.append(copy.deepcopy(example))
+
+        save_to_file(examples)
+        return example
+
+    # If the civilians and the enemies are in different locations.
+    else:
+        response = [f'Yes, the {type_civilian} and {type_enemy} are in different locations.', f'The {type_enemy} and {type_civilian} are in different location.',
+            'Both are in different locations.', f'Yes the {type_civilian} are safe since they are in a different location than the {type_enemy}.']
+        rand_response = randint(0, len(response)-1)
+
+        example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
+        example['Knowledge'] = knowledge
+        example['Response'] = response[rand_response]
+        examples.append(copy.deepcopy(example))
+
+        save_to_file(examples)
+        return example     
+
 def generate_dialogues(number_dialogues):
     examples = []
     
@@ -84,106 +232,20 @@ def generate_dialogues(number_dialogues):
         save_to_file(examples)
         examples = []
 
-        # Following up the conversation (asking for weapons).
+        questions = [0, 1, 2, 3, 4]
+        shuffle(questions)
         if number_enemies != '0':
-            context = [f'What weapons are {type_enemy} carrying?', f'Are the {type_enemy} armed?',
-                f'Anything I should know about the equipments of the {type_enemy}?', f'Can you tell me anything about the weapons of the {type_enemy}?']
-            rand_context = randint(0, len(context)-1)
-
-            prev_response = example['Response']
-            response = [f'They are armed with {type_weapon}.', f'They are equipped with {type_weapon}.', 
-                f'They are carrying {type_weapon}.', f'I detected {type_weapon}.', f'CCTV footages showcased that they are carrying {type_weapon}.']
-            rand_response = randint(0, len(response)-1)
-
-            example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
-            example['Knowledge'] = knowledge
-            example['Response'] = response[rand_response]
-            examples.append(copy.deepcopy(example))
-
-            save_to_file(examples)
-            examples = []
-
-            # Following up the conversation (asking about their locations).
-            context = ['Where are they?', 'What is their location?', f'Can you tell me anything about the position of the {type_enemy}?',
-                'Where are they at?', f'Give me their position!', 'What about their location?']
-            rand_context = randint(0, len(context)-1)
-
-            prev_response = example['Response']
-            response = [f'They are at {enemy_street_name}.', f'They are located at {enemy_street_name}.', 
-                f'The {type_enemy} are at {enemy_street_name}.', f'CCTV footages detected them at {enemy_street_name}.',
-                f'It looks like they are at {enemy_street_name}.']
-            rand_response = randint(0, len(response)-1)
-
-            example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
-            example['Knowledge'] = knowledge
-            example['Response'] = response[rand_response]
-            examples.append(copy.deepcopy(example))
-
-            save_to_file(examples)
-            examples = []
-
-            # Following up the conversation (asking about cars).
-            random_variable = randint(0,1)
-
-            # Asking for the correct car color.
-            if random_variable == 0:
-                context = [f'Can you detect any {mobile_color} {type_mobile}?', f'Any {mobile_color} {type_mobile}?',
-                    f'Can you see any {mobile_color} {type_mobile}?', f'Are the {type_mobile} of color {mobile_color}?',
-                    f'Is the {type_mobile} in {mobile_street_name} {mobile_color}?']
-                rand_context = randint(0, len(context)-1)
-
-                prev_response = example['Response']
-                response = [f'Yes, the {type_mobile} in {mobile_street_name} are {mobile_color}.', 
-                    f'I detected {number_mobiles} {mobile_color} {type_mobile} in {mobile_street_name}.', 
-                    f'The {type_mobile} in {mobile_street_name} are {mobile_color}.']
-                rand_response = randint(0, len(response)-1)
-
-                example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
-                example['Knowledge'] = knowledge
-                example['Response'] = response[rand_response]
-                examples.append(copy.deepcopy(example))
-
-                save_to_file(examples)
-                examples = []
-
-            # Asking for the wrong car color.
-            else:
-                context = [f'Can you detect any {other_color} {type_mobile}?', f'Any {other_color} {type_mobile}?',
-                    f'Can you see any {other_color} {type_mobile}?', f'Are the {type_mobile} of color {other_color}?',
-                    f'Is the {type_mobile} in {mobile_street_name} {other_color}?']
-                rand_context = randint(0, len(context)-1)
-
-                prev_response = example['Response']
-                response = [f'No, the {type_mobile} in {mobile_street_name} are {mobile_color}.', 
-                    f'No, but I detected {number_mobiles} {mobile_color} {type_mobile} in {mobile_street_name}.', 
-                    f'No, the {type_mobile} in {mobile_street_name} are {mobile_color}.',
-                    f'No, I can not detect any {other_color} {type_mobile}.', f'No {other_color} {type_mobile} detected.']
-                rand_response = randint(0, len(response)-1)
-
-                example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
-                example['Knowledge'] = knowledge
-                example['Response'] = response[rand_response]
-                examples.append(copy.deepcopy(example))                     
-
-                save_to_file(examples)
-                examples = []
-
-            # Following up the conversation (emotional conversation).
-            context = ['I am scared.', 'I am worried.', 'I am kinda scared.', 'I do not know if I will survive.', 'I do not know what to do.']
-            rand_context = randint(0, len(context)-1)
-
-            prev_response = example['Response']
-            response = ['Stick to the plan.', 'You were trained for this.', 'Think about your training.', 'Stay alerted.', 
-                'Understand, be careful.', 'Stay calm.', 'Breath air.', 'Take a deep breath.', 'Focus.', 'Stay focused.']
-            rand_response = randint(0, len(response)-1)
-
-            example['Context'] = example['Context'] + ' ' + prev_response + ' ' + context[rand_context]
-            example['Knowledge'] = knowledge
-            example['Response'] = response[rand_response]
-            examples.append(copy.deepcopy(example))
-
-            save_to_file(examples)
-            examples = []
+            for question_index in range(len(questions)):
+                if questions[question_index] == 0:
+                    example = ask_weapons(example, knowledge, type_enemy, type_weapon)
+                if questions[question_index] == 1:
+                    example = ask_location(example, knowledge, type_enemy, enemy_street_name)
+                if questions[question_index] == 2:
+                    example = ask_cars(example, knowledge, mobile_color, other_color, type_mobile, mobile_street_name, number_mobiles)
+                if questions[question_index] == 3:
+                    example = ask_support(example, knowledge)
+                if questions[question_index] == 4:
+                    ask_civilians(example, knowledge, type_civilian, civilian_street_name, type_enemy, enemy_street_name)
 
 def save_to_file(examples):
     with jsonlines.open(f'military_dialogues.jsonl', mode='a') as writer:
