@@ -1,3 +1,7 @@
+# Lucy Jackson (lucy@oxdynamics.com) - Oxford Dynamics - November 2022
+#
+# This scripts visualizes the speech of the user and the AI with wave patterns.
+
 import pyshine as ps
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,10 +43,15 @@ def generate_graph_set(ax, j, k, l):
     ax.plot(x + 1.3 * l, y_9, 'c', alpha = 0.05)
 
 
-audio,context = ps.audioCapture(mode='send')
+def main():
+    audio,context = ps.audioCapture(mode='send')
 
-fig, ax = plt.subplots(figsize=(8,2))
-generate_graph_set(ax, 1, 0.5, 0.3)
-ax.axis('off')
-animation = FuncAnimation(fig, animate, frames=200, interval=10, repeat=False)
-plt.show()
+    fig, ax = plt.subplots(figsize=(8,2))
+    generate_graph_set(ax, 1, 0.5, 0.3)
+    ax.axis('off')
+    animation = FuncAnimation(fig, animate, frames=200, interval=10, repeat=False)
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()
