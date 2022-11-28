@@ -8,13 +8,12 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 import random
 
-
-def animate(i):
+def animate(ax, audio):
     ax.clear()
     y = audio.get()
     
     for i in range(5):
-        generate_graph_set(ax, 3* y[i][0], 3* y[i][1], random.randint(0,5)/3)
+        generate_graph_set(ax, y[i][0], y[i][1], random.randint(0,5)/10)
     
     ax.set_ylim( ymin=-0.2, ymax=0.2)	 
     ax.axis('off')
@@ -49,7 +48,7 @@ def main():
     fig, ax = plt.subplots(figsize=(8,2))
     generate_graph_set(ax, 1, 0.5, 0.3)
     ax.axis('off')
-    animation = FuncAnimation(fig, animate, frames=200, interval=10, repeat=False)
+    animation = FuncAnimation(fig, animate(ax, audio), frames=200, interval=10, repeat=False)
     plt.show()
 
 
