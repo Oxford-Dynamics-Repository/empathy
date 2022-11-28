@@ -1,4 +1,5 @@
 # Lucy Jackson (lucy@oxdynamics.com) - Oxford Dynamics - November 2022
+# Johann Diep (johann@oxdynamics.com) - Oxford Dynamics -November 2022
 #
 # This script is used to generate the input knowledge for the Seeker model.
 # It draws answers from a database using TAPAS.
