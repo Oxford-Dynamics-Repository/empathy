@@ -70,9 +70,6 @@ class HoldConversation:
         else:
             outter = table.iloc[coordinate[0][0][0],:][7]
 
-        print(outter)
-        print(output)
-
         if coordinate[0][0][1] == 0:
             response = f'There are {output} around.'
         if coordinate[0][0][1] == 1:
