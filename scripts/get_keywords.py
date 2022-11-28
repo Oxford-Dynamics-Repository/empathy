@@ -2,12 +2,8 @@
 #
 # This script sets up the TAPAS model.
 
-from transformers import TapasTokenizer, TapasForQuestionAnswering
-from return_database import return_database
 
-
-def get_keywords(query, model, tokenizer):
-    table = return_database()
+def get_keywords(query, model, tokenizer, table):
     queries = [query]
 
     inputs = tokenizer(table=table, queries=queries, padding="max_length", return_tensors="pt")
@@ -33,9 +29,9 @@ def get_keywords(query, model, tokenizer):
 
     for query, answer, predicted_agg in zip(queries, answers, aggregation_predictions_string):
         if predicted_agg == "NONE":
-            return(answer)
+            return(answer, predicted_answer_coordinates)
         else:
-            return(predicted_agg + " > " + answer)
+            return(answer, predicted_answer_coordinates)
 
 def main():
     keyword = get_keywords(query)
