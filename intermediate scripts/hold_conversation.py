@@ -51,7 +51,7 @@ class HoldConversation:
     def return_database(self):
         threat_info = {'threats':["5 enemies"], 'distance':["5 minutes"],'weapons':["AK47s"], 'location':["West Road"], 'wearing':["red jumpers"]}
         other_info = {'civilians':["Children"], 'location':["Regents Road"], 'distance':["1 minute"], 'wearing':["blue coats"]}
-        vehicle_info = {'vehicles': ["Black SUV"], 'location':["Adams Court"], 'color':["Black"], 'distance':["30 minutes"]}
+        vehicle_info = {'vehicles': ["Black SUV"], 'location':["Adams Court"], 'distance away':["30 minutes"]}
         
         threat_info = pd.DataFrame.from_dict(threat_info)
         other_info = pd.DataFrame.from_dict(other_info)
@@ -64,28 +64,26 @@ class HoldConversation:
 
     def generate(self, output, coordinate, table):
         if table.iloc[coordinate[0][0][0],:][0] != "":
-            outter = table.iloc[coordinate[0][0][0],:][0]
+            outer = table.iloc[coordinate[0][0][0],:][0]
         elif table.iloc[coordinate[0][0][0],:][6] != "":
-            outter = table.iloc[coordinate[0][0][0],:][6]
+            outer = table.iloc[coordinate[0][0][0],:][6]
         else:
-            outter = table.iloc[coordinate[0][0][0],:][7]
+            outer = table.iloc[coordinate[0][0][0],:][7]
 
         if coordinate[0][0][1] == 0:
-            response = f'There are {output} around.'
+            response = f'There are {output} around.' # threats
         if coordinate[0][0][1] == 1:
-            response = f'The {outter} are {output} away.'
+            response = f'The {outer} are {output} away.' # distance
         if coordinate[0][0][1] == 2:
-            response = f'The {outter} are armed with {output}.'
+            response = f'The {outer} are armed with {output}.' #weapons
         if coordinate[0][0][1] == 3:
-            response = f'The {outter} are on {output}.'
+            response = f'The {outer} are on {output}.' # location
         if coordinate[0][0][1] == 4:
-            response = f'The {outter} are wearing {output}.'
+            response = f'The {outer} are wearing {output}.' # wearing
         if coordinate[0][0][1] == 5:
-            response = f'The {outter} is {output}.'
+            response = f'The {outer} is {output}.' # civilians
         if coordinate[0][0][1] == 6:
-            response = f'There are {output} around.'    
-        if coordinate[0][0][1] == 7:
-            response = f'There are {output} around.'    
+            response = f'There are {output} around.' # vehicles  
         return response
 
     def generate_seeker_input(self, question):
