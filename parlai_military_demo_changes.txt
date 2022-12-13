@@ -1,0 +1,72 @@
+The below changes were done to the ParlAI(https://github.com/facebookresearch/ParlAI) library 
+for the military demo. The changes are explained and then shown using the 'git diff' command.
+-----------------------------------------------------------------------------------------------------
+
+1. To /projects/seeker/agents/seeker.py - add a function (get_seeker_modules) to retrieve
+   the 3 main model agents
+
+diff --git a/projects/seeker/agents/seeker.py b/projects/seeker/agents/seeker.py
+index 78802514..d8bb1fc2 100644
+--- a/projects/seeker/agents/seeker.py
++++ b/projects/seeker/agents/seeker.py
+@@ -867,3 +867,6 @@ class SeekerAgent(ModularAgentMixin):
+                 observation,
+                 temp_history=self.search_query_agent.get_temp_history(observation),
+             )
++
++    def get_seeker_modules(self):
++        return self.search_query_agent, self.knowledge_agent, self.dialogue_agent
+-----------------------------------------------------------------------------------------------------
+
+2. To /parlai/scripts/interactive.py - stop the interactive script by returning the agents
+   and the world after they're created. Also comment out the rest of the interactive() script, 
+   as well as the option logs printing (agent.opt.log())
+
+diff --git a/parlai/scripts/interactive.py b/parlai/scripts/interactive.py
+index d70845f5..2b32ae75 100644
+--- a/parlai/scripts/interactive.py
++++ b/parlai/scripts/interactive.py
+@@ -82,12 +82,15 @@ def interactive(opt):
+     # Create model and assign it to the specified task
+     agent = create_agent(opt, requireModelExists=True)
+-    agent.opt.log()
++    # agent.opt.log()
+     human_agent = LocalHumanAgent(opt)
+     # set up world logger
+     world_logger = WorldLogger(opt) if opt.get('outfile') else None
+     world = create_task(opt, [human_agent, agent])
++    return agent, world
++
++    '''
+     # Show some example dialogs:
+     while not world.epoch_done():
+         world.parley()
+@@ -106,6 +109,7 @@ def interactive(opt):
+     if world_logger is not None:
+         # dump world acts to file
+         world_logger.write(opt['outfile'], world, file_format=opt['save_format'])
++    '''
+-----------------------------------------------------------------------------------------------------
+
+3. To /parlai/opt_presets/gen/seeker_dialogue.opt - change the drm_beam_min_length from 20 to 10
+
+diff --git a/parlai/opt_presets/gen/seeker_dialogue.opt b/parlai/opt_presets/gen/seeker_dialogue.opt
+index 5662abc0..44ca9c01 100644
+--- a/parlai/opt_presets/gen/seeker_dialogue.opt
++++ b/parlai/opt_presets/gen/seeker_dialogue.opt
+@@ -4,7 +4,7 @@
+   "drm_beam_block_full_context": true,
+   "drm_beam_block_ngram": 3,
+   "drm_beam_context_block_ngram": 3,
+-  "drm_beam_min_length": 20,
++  "drm_beam_min_length": 10,
+   "drm_beam_size": 10,
+   "drm_inference": "beam",
+   "drm_message_mutators": null,
+@@ -46,4 +46,4 @@
+   "sqm_beam_size": 1,
+   "sqm_inference": "beam",
+   "sqm_model": "projects.seeker.agents.seeker:ComboFidSearchQueryAgent"
+-}
+\ No newline at end of file
++}
