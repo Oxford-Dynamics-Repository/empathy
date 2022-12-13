@@ -3,44 +3,55 @@
 # This script translates speech to text and text to speech.
  
 import speech_recognition as sr
-import pyttsx3
- 
+import os
+# import time
 
-# Function to convert text to speech.
-def text_to_speech(text):
-    engine = pyttsx3.init() # Initialize the engine.
-    engine.say(text)
-    engine.runAndWait()
+class VoiceClass:
+    def __init__(self):
+        self.recognizer = sr.Recognizer() # Initialize the recognizer.
 
-def speech_to_text():
-    # Initialize the recognizer.
-    recognizer = sr.Recognizer()
-        
-    # Looping infinitely for user to speak.
-    while(True):   
-        try: # Exception handling to handle exceptions at the runtime.
-            with sr.Microphone() as source:
-                # Wait for a second to let the recognizer adjust the energy threshold 
-                # based on the surrounding noise level.
-                recognizer.adjust_for_ambient_noise(source, duration=0.1)
-                
-                # Listening for the user input.
-                audio = recognizer.listen(source)
-                
-                # Using Google to recognize audio.
-                text = recognizer.recognize_google(audio)
-                text = text.lower()
+    def text_to_speech(self, text):
+        os.system("say " + text)
 
-                return text
-                
-        except:
-            pass
+    def speech_to_text(self):
+        # timeout = time.time() + 60 # hardcode 15s of wait time
+        # Looping infinitely for user to speak.
+        while(True):
+
+            # if time.time() > timeout:
+                # return 'Timeout'
+
+            try: # Exception handling to handle exceptions at the runtime.
+                print("Try-block called.")
+
+                with sr.Microphone() as source:
+                    print("Feel free to speak.")
+
+                    # Wait for a second to let the recognizer adjust the energy threshold 
+                    # based on the surrounding noise level.
+                    self.recognizer.adjust_for_ambient_noise(source, duration=1)
+
+                    # Listening for the user input.
+                    audio = self.recognizer.listen(source)
+
+                    # Using Google to recognize audio.
+                    text = self.recognizer.recognize_google(audio)
+                    text = text.lower()
+
+                    return text
+
+            except:
+                print("Pass-block called.")
+                pass
 
 def main():
+    VoiceObject = VoiceClass()
+
     i = 0
-    while(i < 10):
-        output = speech_to_text()
-        text_to_speech(output)
+    while(i < 2):
+        output = VoiceObject.speech_to_text()
+        print("Your text: " + output)
+        VoiceObject.text_to_speech(output)
 
         i = i + 1
 
