@@ -11,6 +11,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 from tqdm import tqdm
 import warnings
+from sklearn.model_selection import train_test_split
+
 warnings.filterwarnings("ignore")
 
 
@@ -87,13 +89,13 @@ def scrape_imdb():
 
     # Writing data into pandas-format.
     review_df = pd.DataFrame({
-        'review_date': review_date_list,
-        'rating': rating_list,
-        'review_title': review_title_list,
         'review': review_list})
 
     # Avoiding line-breaks.
     review_df['review'].replace(to_replace=r"\n", value=" ", regex=True, inplace=True)
+
+    review_train_df, review_test_df = train_test_split(review_df, test_size = 0.25, random_state = 8)
+    review_train_df, review_val_df = train_test_split(review_train_df, test_size = 0.25, random_state = 8)
 
     # Writing error messages into pandas-format.
     error_df = pd.DataFrame({
@@ -101,12 +103,14 @@ def scrape_imdb():
         'error_msg': error_msg_list})
 
     # Saving to file.
-    review_df.to_csv("harry_potter_1_reviews.csv", index = False)
+    review_train_df.to_csv("harry_potter_1_reviews_train.csv", index = False)
+    review_test_df.to_csv("harry_potter_1_reviews_test.csv", index = False)
+    review_val_df.to_csv("harry_potter_1_reviews_val.csv", index = False)
     error_df.to_csv("error_messages.csv", index = False)
 
 def main():
     scrape_imdb()
-    print(pd.read_csv('harry_potter_1_reviews.csv'))
+    print(pd.read_csv('harry_potter_1_reviews_train.csv'))
     
 
 if __name__ == '__main__':
