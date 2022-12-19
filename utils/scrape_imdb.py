@@ -94,8 +94,7 @@ def scrape_imdb():
     # Avoiding line-breaks.
     review_df['review'].replace(to_replace=r"\n", value=" ", regex=True, inplace=True)
 
-    review_train_df, review_test_df = train_test_split(review_df, test_size = 0.25, random_state = 8)
-    review_train_df, review_val_df = train_test_split(review_train_df, test_size = 0.25, random_state = 8)
+    review_train_df, review_val_df = train_test_split(review_df, test_size = 0.25, random_state = 8)
 
     # Writing error messages into pandas-format.
     error_df = pd.DataFrame({
@@ -104,7 +103,6 @@ def scrape_imdb():
 
     # Saving to file.
     review_train_df.to_csv("harry_potter_1_reviews_train.csv", index = False)
-    review_test_df.to_csv("harry_potter_1_reviews_test.csv", index = False)
     review_val_df.to_csv("harry_potter_1_reviews_val.csv", index = False)
     error_df.to_csv("error_messages.csv", index = False)
 
